@@ -5,6 +5,7 @@ class TicTacToeModel:
 
     def __init__(self, board_size=3):
         self.board_size = board_size
+        self.num_moves = 0
         self.board = [[None for i in range(self.board_size)]
                       for j in range(self.board_size)]
         self.current_player = 0
@@ -29,6 +30,7 @@ class TicTacToeModel:
             raise ValueError("invalid move, spot already taken")
         self.board[x][y] = player
         self.current_player = (self.current_player + 1) % 2
+        self.num_moves += 1
 
 
 def main():
