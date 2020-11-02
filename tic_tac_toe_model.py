@@ -7,7 +7,7 @@ class TicTacToeModel:
         self.board_size = board_size
         self.board = [[None for i in range(self.board_size)]
                       for j in range(self.board_size)]
-        self.current_player = 1
+        self.current_player = 0
 
     def check_winner(self, x, y):
         p = self.board[x][y]
@@ -25,8 +25,10 @@ class TicTacToeModel:
             raise ValueError("invalid player")
         if self.current_player != player:
             raise ValueError("player is not current player")
+        if self.board[x][y] is not None:
+            raise ValueError("invalid move, spot already taken")
         self.board[x][y] = player
-        self.current_player = (self.currentPlayer + 1) % 2
+        self.current_player = (self.current_player + 1) % 2
 
 
 def main():
