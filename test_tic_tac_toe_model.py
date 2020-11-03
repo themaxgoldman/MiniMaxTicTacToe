@@ -194,6 +194,9 @@ class TicTacToeModelTestCases(unittest.TestCase):
         self.assertTrue(self.winning_board.check_winner(1, 1))
         self.assertTrue(self.winning_board.check_winner(2, 0))
 
+    # TODO: Test filled function
+    # TODO: Test sizes besides 3
+
 
 if __name__ == "__main__":
     unittest.main()

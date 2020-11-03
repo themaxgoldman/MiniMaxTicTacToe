@@ -64,6 +64,9 @@ class TicTacToeModel:
         self.current_player = (self.current_player + 1) % 2
         self.num_moves += 1
 
+    def filled(self):
+        return self.num_moves == self.board_size ** 2
+
 
 def main():
     model = TicTacToeModel()
