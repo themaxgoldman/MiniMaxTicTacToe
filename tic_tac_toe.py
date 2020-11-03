@@ -1,4 +1,5 @@
 from tic_tac_toe_model import TicTacToeModel
+import sys
 
 
 def player_mark(player):
@@ -44,11 +45,18 @@ def get_next_move(player):
 def main():
     print("-- Tic Tac Toe --\n")
     model = TicTacToeModel()
+    if len(sys.argv) > 1:
+        model = TicTacToeModel(int(sys.argv[1]))
     while True:
         display_board(model.board)
         current_player = model.current_player
         (x, y) = get_next_move(current_player)
-        model.make_move(x, y, current_player)
+        try:
+            model.make_move(x, y, current_player)
+        except ValueError as err:
+            print(err)
+            print("Try again!")
+            continue
         if model.check_winner(x, y):
             display_board(model.board)
             print("Player {player} won!".format(player=current_player))
