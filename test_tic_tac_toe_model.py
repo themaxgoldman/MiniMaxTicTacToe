@@ -80,6 +80,120 @@ class TicTacToeModelTestCases(unittest.TestCase):
                           [None, 0, None],
                           [0,    1, 1]])
 
+    def test_check_winner_empty_spot(self):
+        with self.assertRaises(ValueError):
+            self.mid_game_board.check_winner(1, 2)
+
+    def test_check_winner_x_out_of_range(self):
+        with self.assertRaises(ValueError):
+            self.empty_board.check_winner(3, 0)
+        with self.assertRaises(ValueError):
+            self.empty_board.check_winner(-1, 0)
+
+    def test_check_winner_y_out_of_range(self):
+        with self.assertRaises(ValueError):
+            self.empty_board.check_winner(0, 3)
+        with self.assertRaises(ValueError):
+            self.empty_board.check_winner(0, -1)
+
+    def test_check_winner_empty_board(self):
+        self.assertFalse(self.empty_board.check_winner(0, 0))
+
+    def test_check_winner_no_winner(self):
+        self.assertFalse(self.mid_game_board.check_winner(0, 0))
+        self.assertFalse(self.mid_game_board.check_winner(0, 1))
+        self.assertFalse(self.mid_game_board.check_winner(0, 2))
+        self.assertFalse(self.mid_game_board.check_winner(1, 1))
+        self.assertFalse(self.mid_game_board.check_winner(2, 1))
+
+    def test_check_winner_column_0(self):
+        self.winning_board = TicTacToeModel()
+        self.winning_board.current_player = 1
+        self.winning_board.num_moves = 8
+        self.winning_board.board = [[1, None, 0],
+                                    [1, 0,    0],
+                                    [1, 0,    1]]
+        self.assertTrue(self.winning_board.check_winner(0, 0))
+        self.assertTrue(self.winning_board.check_winner(1, 0))
+        self.assertTrue(self.winning_board.check_winner(2, 0))
+
+    def test_check_winner_column_1(self):
+        self.winning_board = TicTacToeModel()
+        self.winning_board.current_player = 0
+        self.winning_board.num_moves = 5
+        self.winning_board.board = [[1,    0,    1],
+                                    [None, 0,    None],
+                                    [None, 0,    None]]
+        self.assertTrue(self.winning_board.check_winner(0, 1))
+        self.assertTrue(self.winning_board.check_winner(1, 1))
+        self.assertTrue(self.winning_board.check_winner(2, 1))
+
+    def test_check_winner_column_2(self):
+        self.winning_board = TicTacToeModel()
+        self.winning_board.current_player = 1
+        self.winning_board.num_moves = 6
+        self.winning_board.board = [[0,    0,    1],
+                                    [None, 0,    1],
+                                    [None, None, 1]]
+        self.assertTrue(self.winning_board.check_winner(0, 2))
+        self.assertTrue(self.winning_board.check_winner(1, 2))
+        self.assertTrue(self.winning_board.check_winner(2, 2))
+
+    def test_check_winner_row_0(self):
+        self.winning_board = TicTacToeModel()
+        self.winning_board.current_player = 0
+        self.winning_board.num_moves = 7
+        self.winning_board.board = [[0,    0,    0],
+                                    [None, 1,    1],
+                                    [1,    None, 0]]
+        self.assertTrue(self.winning_board.check_winner(0, 0))
+        self.assertTrue(self.winning_board.check_winner(0, 1))
+        self.assertTrue(self.winning_board.check_winner(0, 2))
+
+    def test_check_winner_row_1(self):
+        self.winning_board = TicTacToeModel()
+        self.winning_board.current_player = 1
+        self.winning_board.num_moves = 7
+        self.winning_board.board = [[0, None, 0],
+                                    [1, 1,    1],
+                                    [1, 0,    0]]
+        self.assertTrue(self.winning_board.check_winner(1, 0))
+        self.assertTrue(self.winning_board.check_winner(1, 1))
+        self.assertTrue(self.winning_board.check_winner(1, 2))
+
+    def test_check_winner_row_2(self):
+        self.winning_board = TicTacToeModel()
+        self.winning_board.current_player = 1
+        self.winning_board.num_moves = 7
+        self.winning_board.board = [[None, None, None],
+                                    [1,    1,    None],
+                                    [0,    0,    0]]
+        self.assertTrue(self.winning_board.check_winner(2, 0))
+        self.assertTrue(self.winning_board.check_winner(2, 1))
+        self.assertTrue(self.winning_board.check_winner(2, 2))
+
+    def test_check_winner_left_right_diag(self):
+        self.winning_board = TicTacToeModel()
+        self.winning_board.current_player = 1
+        self.winning_board.num_moves = 6
+        self.winning_board.board = [[1, None, None],
+                                    [0,    1, None],
+                                    [0,    0, 1]]
+        self.assertTrue(self.winning_board.check_winner(0, 0))
+        self.assertTrue(self.winning_board.check_winner(1, 1))
+        self.assertTrue(self.winning_board.check_winner(2, 2))
+
+    def test_check_winner_right_left_diag(self):
+        self.winning_board = TicTacToeModel()
+        self.winning_board.current_player = 1
+        self.winning_board.num_moves = 6
+        self.winning_board.board = [[0, None, 0],
+                                    [1, 0,    1],
+                                    [0, None, 1]]
+        self.assertTrue(self.winning_board.check_winner(0, 2))
+        self.assertTrue(self.winning_board.check_winner(1, 1))
+        self.assertTrue(self.winning_board.check_winner(2, 0))
+
 
 if __name__ == "__main__":
     unittest.main()
