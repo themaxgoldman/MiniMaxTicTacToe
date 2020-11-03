@@ -50,10 +50,14 @@ class TicTacToeModel:
     def make_move(self, x, y, player):
         if x >= self.board_size or x < 0:
             raise ValueError(
-                "x: %d out of range: %d".format(x, self.board_size - 1))
+                "x: {x} out of range: {range}".format(x=x,
+                                                      range=(
+                                                          self.board_size-1)))
         if y >= self.board_size or y < 0:
             raise ValueError(
-                "y: %d out of range: %d".format(y, self.board_size - 1))
+                "y: {y} out of range: {range}".format(y=y,
+                                                      range=(
+                                                          self.board_size-1)))
         if player < 0 or player > 1:
             raise ValueError("invalid player")
         if self.current_player != player:
