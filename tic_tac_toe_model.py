@@ -14,10 +14,10 @@ class TicTacToeModel:
     def check_winner(self, x, y):
         if x >= self.board_size or x < 0:
             raise ValueError(
-                "x: %d out of range: %d".format(x, self.board_size - 1))
+                "x: {x} out of range: {board_size}".format(x=x, board_size=(self.board_size - 1)))
         if y >= self.board_size or y < 0:
             raise ValueError(
-                "y: %d out of range: %d".format(y, self.board_size - 1))
+                "y: {} out of range: {}".format(y, self.board_size - 1))
         if self.num_moves < self.board_size * 2 - 1:
             return False
         player = self.board[x][y]
@@ -70,13 +70,4 @@ class TicTacToeModel:
         self.num_moves += 1
 
     def filled(self):
-        return self.num_moves == self.board_size ** 2
-
-
-def main():
-    model = TicTacToeModel()
-    model.make_move(0, 1, 4)
-
-
-if __name__ == "__main__":
-    main()
+        return self.num_moves >= self.board_size ** 2
