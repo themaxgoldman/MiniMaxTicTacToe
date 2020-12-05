@@ -1,4 +1,5 @@
 from enum import Enum
+import numpy as np
 
 
 class TicTacToeModel:
@@ -17,7 +18,7 @@ class TicTacToeModel:
         if y >= self.board_size or y < 0:
             raise ValueError(
                 "y: %d out of range: %d".format(y, self.board_size - 1))
-        if self.num_moves < 5:
+        if self.num_moves < self.board_size * 2 - 1:
             return False
         player = self.board[x][y]
         if player is None:
