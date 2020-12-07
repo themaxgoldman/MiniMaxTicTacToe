@@ -14,6 +14,8 @@ class TicTacToeModel:
         self.remaining_moves = {
             (x, y) for x in range(self.board_size)
             for y in range(self.board_size)}
+        self.winner = None
+        self.last_move = None
 
     def copy(self):
         copied = TicTacToeModel(board_size=self.board_size)
@@ -21,6 +23,7 @@ class TicTacToeModel:
         copied.current_player = self.current_player
         copied.board = self.board.copy()
         copied.remaining_moves = self.remaining_moves.copy()
+        copied.winner = self.winner
         return copied
 
     def check_winner(self, spot):
@@ -35,6 +38,9 @@ class TicTacToeModel:
         player = self.board[spot[0]][spot[1]]
         if player is None:
             raise ValueError("empty spot given")
+
+        if self.winner is not None:
+            return True
 
         column_win = True
         row_win = True
@@ -58,7 +64,10 @@ class TicTacToeModel:
                 rl_diag_win = rl_diag_win and (
                     self.board[i][self.board_size - 1 - i] == player)
 
-        return column_win or row_win or lr_diag_win or rl_diag_win
+        if column_win or row_win or lr_diag_win or rl_diag_win:
+            self.winner = player
+            return True
+        return False
 
     def make_move(self, move, player):
         if move[0] >= self.board_size or move[0] < 0:
@@ -81,6 +90,17 @@ class TicTacToeModel:
         self.current_player = (self.current_player + 1) % 2
         self.num_moves += 1
         self.remaining_moves.remove(move)
+        self.last_move = move
+
+    def undo_last_move(self):
+        if self.last_move is None:
+            raise ValueError("no moves made or last move already undone")
+        self.board[self.last_move[0]][self.last_move[1]] = None
+        self.current_player = (self.current_player + 1) % 2
+        self.num_moves -= 1
+        self.remaining_moves.add(self.last_move)
+        self.winner = None
+        self.last_move = None
 
     def filled(self):
         return self.num_moves >= self.board_size ** 2

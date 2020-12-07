@@ -478,6 +478,21 @@ class TicTacToeModelTestCases(unittest.TestCase):
         self.assertEqual(copy.remaining_moves, {
                          (1, 0), (1, 2), (2, 0), (2, 2)})
 
+    def test_undo_last_move_no_move(self):
+        with self.assertRaises(ValueError):
+            self.empty_board.undo_last_move()
+        self.mid_game_board.undo_last_move()
+        with self.assertRaises(ValueError):
+            self.mid_game_board.undo_last_move()
+
+    def test_undo_last_move_mid_game(self):
+        self.assertEqual(self.mid_game_board.last_move, (1, 1))
+        self.assertEqual(self.mid_game_board.num_moves, 4)
+        self.assertEqual(self.mid_game_board.remaining_moves,
+                         {(1, 0), (1, 2), (2, 0), (2, 2), (1, 1)})
+        self.assertEqual(self.mid_game_board.current_player, 0)
+        self.assertIsNone(self.mid_game_board.last_move)
+
 
 if __name__ == "__main__":
     unittest.main()
