@@ -11,16 +11,16 @@ class TicTacToeModel:
                       for j in range(self.board_size)]
         self.current_player = 0
 
-    def check_winner(self, x, y):
-        if x >= self.board_size or x < 0:
+    def check_winner(self, spot):
+        if spot[0] >= self.board_size or spot[0] < 0:
+            raise ValueError("x: {x} out of range: {board_size}".format(
+                x=spot[0], board_size=(self.board_size - 1)))
+        if spot[1] >= self.board_size or spot[1] < 0:
             raise ValueError(
-                "x: {x} out of range: {board_size}".format(x=x, board_size=(self.board_size - 1)))
-        if y >= self.board_size or y < 0:
-            raise ValueError(
-                "y: {} out of range: {}".format(y, self.board_size - 1))
+                "y: {} out of range: {}".format(spot[1], self.board_size - 1))
         if self.num_moves < self.board_size * 2 - 1:
             return False
-        player = self.board[x][y]
+        player = self.board[spot[0]][spot[1]]
         if player is None:
             raise ValueError("empty spot given")
 
@@ -29,18 +29,18 @@ class TicTacToeModel:
 
         rl_diag_win = True
         for i in range(self.board_size):
-            column_win = column_win and self.board[i][y] == player
-            row_win = row_win and self.board[x][i] == player
+            column_win = column_win and self.board[i][spot[1]] == player
+            row_win = row_win and self.board[spot[0]][i] == player
 
         lr_diag_win = False
-        if x == y:
+        if spot[0] == spot[1]:
             lr_diag_win = True
             for i in range(self.board_size):
                 lr_diag_win = lr_diag_win and (
                     self.board[i][i] == player)
 
         rl_diag_win = False
-        if x + y == self.board_size - 1:
+        if spot[0] + spot[1] == self.board_size - 1:
             rl_diag_win = True
             for i in range(self.board_size):
                 rl_diag_win = rl_diag_win and (
@@ -48,24 +48,24 @@ class TicTacToeModel:
 
         return column_win or row_win or lr_diag_win or rl_diag_win
 
-    def make_move(self, x, y, player):
-        if x >= self.board_size or x < 0:
+    def make_move(self, move, player):
+        if move[0] >= self.board_size or move[0] < 0:
             raise ValueError(
-                "x: {x} out of range: {range}".format(x=x,
-                                                      range=(
-                                                          self.board_size-1)))
-        if y >= self.board_size or y < 0:
+                "x: {x} out of range: {range}".format(
+                    x=move[0],
+                    range=(self.board_size - 1)))
+        if move[1] >= self.board_size or move[1] < 0:
             raise ValueError(
-                "y: {y} out of range: {range}".format(y=y,
+                "y: {y} out of range: {range}".format(y=move[1],
                                                       range=(
                                                           self.board_size-1)))
         if player < 0 or player > 1:
             raise ValueError("invalid player")
         if self.current_player != player:
             raise ValueError("player is not current player")
-        if self.board[x][y] is not None:
+        if self.board[move[0]][move[1]] is not None:
             raise ValueError("invalid move, spot already taken")
-        self.board[x][y] = player
+        self.board[move[0]][move[1]] = player
         self.current_player = (self.current_player + 1) % 2
         self.num_moves += 1
 
