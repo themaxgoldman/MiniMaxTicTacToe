@@ -3,6 +3,15 @@ import numpy as np
 import copy
 
 
+def player_mark(player):
+    if player == 1:
+        return "O"
+    elif player == 0:
+        return "X"
+    else:
+        return " "
+
+
 class TicTacToeModel:
 
     def __init__(self, board_size=3):
@@ -15,7 +24,28 @@ class TicTacToeModel:
             (x, y) for x in range(self.board_size)
             for y in range(self.board_size)}
         self.winner = None
-        self.last_move = None
+        self.moves = list()
+
+    def __str__(self):
+        """
+        |---|---|---|
+        | O |   | X |
+        |---|---|---|
+        | X |   | O |
+        |---|---|---|
+        |   |   | X |
+        |---|---|---|
+        """
+        divider = "|---" * self.board_size + "|"
+        final_str = "\n"
+        for x in range(self.board_size):
+            row = "|"
+            for y in range(self.board_size):
+                row += " " + player_mark(self.board[x][y]) + " |"
+            final_str = final_str + divider + '\n'
+            final_str = final_str + row + '\n'
+        final_str = final_str + divider + '\n'
+        return final_str
 
     def copy(self):
         copied = TicTacToeModel(board_size=self.board_size)
@@ -24,6 +54,7 @@ class TicTacToeModel:
         copied.board = self.board.copy()
         copied.remaining_moves = self.remaining_moves.copy()
         copied.winner = self.winner
+        coped.moves = self.moves.copy()
         return copied
 
     def check_winner(self, spot):
@@ -90,17 +121,17 @@ class TicTacToeModel:
         self.current_player = (self.current_player + 1) % 2
         self.num_moves += 1
         self.remaining_moves.remove(move)
-        self.last_move = move
+        self.moves.append(move)
 
-    def undo_last_move(self):
-        if self.last_move is None:
-            raise ValueError("no moves made or last move already undone")
-        self.board[self.last_move[0]][self.last_move[1]] = None
+    def undo_move(self):
+        if len(self.moves) == 0:
+            raise ValueError("no moves to undo")
+        last_move = self.moves.pop()
+        self.board[last_move[0]][last_move[1]] = None
         self.current_player = (self.current_player + 1) % 2
         self.num_moves -= 1
-        self.remaining_moves.add(self.last_move)
+        self.remaining_moves.add(last_move)
         self.winner = None
-        self.last_move = None
 
     def filled(self):
         return self.num_moves >= self.board_size ** 2

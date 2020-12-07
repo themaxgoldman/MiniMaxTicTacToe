@@ -1,6 +1,7 @@
 from tic_tac_toe_model import TicTacToeModel
 import sys
 import requests
+import tic_tac_toe_minimax as minimax
 
 
 def player_mark(player):
@@ -34,8 +35,10 @@ def display_board(board):
     print(divider)
 
 
-def get_next_move(player):
+def get_next_move(player, model):
     # TODO: Convert to single player with one AI
+    if player == 1 or player == 0:
+        return minimax.get_next_move(player, model)
     raw_move = input(
         "Enter move (x,y) player {player}: ".format(player=player))
     xy = raw_move.split(",")
@@ -53,14 +56,14 @@ def main():
     while True:
         display_board(model.board)
         current_player = model.current_player
-        (x, y) = get_next_move(current_player)
+        next_move = get_next_move(current_player, model)
         try:
-            model.make_move(x, y, current_player)
+            model.make_move(next_move, current_player)
         except ValueError as err:
             print(err)
             print("Try again!")
             continue
-        if model.check_winner(x, y):
+        if model.check_winner(next_move):
             display_board(model.board)
             print("Player {player} won!".format(player=current_player))
             break
