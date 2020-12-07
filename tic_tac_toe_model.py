@@ -10,6 +10,9 @@ class TicTacToeModel:
         self.board = [[None for i in range(self.board_size)]
                       for j in range(self.board_size)]
         self.current_player = 0
+        self.remaining_moves = {
+            (x, y) for x in range(self.board_size)
+            for y in range(self.board_size)}
 
     def check_winner(self, spot):
         if spot[0] >= self.board_size or spot[0] < 0:
@@ -68,6 +71,7 @@ class TicTacToeModel:
         self.board[move[0]][move[1]] = player
         self.current_player = (self.current_player + 1) % 2
         self.num_moves += 1
+        self.remaining_moves.remove(move)
 
     def filled(self):
         return self.num_moves >= self.board_size ** 2
