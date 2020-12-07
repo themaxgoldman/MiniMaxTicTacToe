@@ -461,6 +461,23 @@ class TicTacToeModelTestCases(unittest.TestCase):
         self.assertEqual(
             self.empty_board.remaining_moves, set())
 
+    def test_copy(self):
+        copy = self.mid_game_board.copy()
+        self.assertEqual(copy.num_moves, 5)
+        self.assertEqual(copy.current_player, 1)
+        self.assertEqual(copy.board, self.mid_game_board.board)
+        self.assertEqual(copy.remaining_moves, {
+                         (1, 0), (1, 2), (2, 0), (2, 2)})
+
+        copy_board_before = copy.board.copy()
+        self.mid_game_board.make_move((1, 0), 1)
+
+        self.assertEqual(copy.num_moves, 5)
+        self.assertEqual(copy.current_player, 1)
+        self.assertEqual(copy.board, copy_board_before)
+        self.assertEqual(copy.remaining_moves, {
+                         (1, 0), (1, 2), (2, 0), (2, 2)})
+
 
 if __name__ == "__main__":
     unittest.main()

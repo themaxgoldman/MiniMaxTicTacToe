@@ -1,5 +1,6 @@
 from enum import Enum
 import numpy as np
+import copy
 
 
 class TicTacToeModel:
@@ -7,12 +8,20 @@ class TicTacToeModel:
     def __init__(self, board_size=3):
         self.board_size = board_size
         self.num_moves = 0
-        self.board = [[None for i in range(self.board_size)]
-                      for j in range(self.board_size)]
         self.current_player = 0
+        self.board = [[None for x in range(self.board_size)]
+                      for y in range(self.board_size)]
         self.remaining_moves = {
             (x, y) for x in range(self.board_size)
             for y in range(self.board_size)}
+
+    def copy(self):
+        copied = TicTacToeModel(board_size=self.board_size)
+        copied.num_moves = self.num_moves
+        copied.current_player = self.current_player
+        copied.board = self.board.copy()
+        copied.remaining_moves = self.remaining_moves.copy()
+        return copied
 
     def check_winner(self, spot):
         if spot[0] >= self.board_size or spot[0] < 0:
