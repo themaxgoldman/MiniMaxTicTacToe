@@ -19,7 +19,6 @@ def get_next_move(player, model):
     return highest_move
 
 
-# TODO: Maybe take depth into account for (impossible) imperfect games
 def minimax(model, our_player, maximizing, alpha, beta):
     situation_str = str(model.board) + str(our_player) + \
         str(maximizing) + str(alpha) + str(beta)
@@ -47,13 +46,6 @@ def minimax(model, our_player, maximizing, alpha, beta):
             lowest_move = move_option
         model.undo_move()
 
-        # if move_option == (1, 1):
-        #     print("move: {move} score: {score}".format(
-        #         move=move_option, score=option_score))
-        #     print("high_score: {high_score} low_score: {low_score} alpha:\
-        #          {alpha} beta: {beta}".format(high_score=highest_score,
-        #                                       low_score=lowest_score,
-        #                                       alpha=alpha, beta=beta))
         if maximizing:
             alpha = max(highest_score, alpha)
             if beta <= alpha:

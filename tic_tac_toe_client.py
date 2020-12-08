@@ -6,15 +6,6 @@ import tic_tac_toe_minimax as minimax
 server_endpoint = 'http://127.0.0.1:5000/move'
 
 
-def player_mark(player):
-    if player == 1:
-        return "O"
-    elif player == 0:
-        return "X"
-    else:
-        return " "
-
-
 def get_next_move_from_server(player, model):
     payload = dict()
     payload['board_size'] = model.board_size
@@ -35,7 +26,6 @@ def get_next_move_from_server(player, model):
 
 
 def get_next_move(player, model):
-    # TODO: Convert to single player with one AI
     if player == 1:
         return get_next_move_from_server(player, model)
     raw_move = input(
@@ -47,7 +37,6 @@ def get_next_move(player, model):
 
 
 def main():
-    # TODO: Convert to single player with one AI
     print("-- Tic Tac Toe --\n")
     model = TicTacToeModel()
     if len(sys.argv) > 1:
