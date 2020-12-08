@@ -14,6 +14,8 @@ def player_mark(player):
 
 class TicTacToeModel:
 
+    checked_boards = dict()
+
     def __init__(self, board_size=3):
         self.board_size = board_size
         self.num_moves = 0
@@ -76,6 +78,7 @@ class TicTacToeModel:
         if self.winner is not None:
             return True
 
+        is_winning_state = False
         column_win = True
         row_win = True
 
@@ -98,10 +101,10 @@ class TicTacToeModel:
                 rl_diag_win = rl_diag_win and (
                     self.board[i][self.board_size - 1 - i] == player)
 
-        if column_win or row_win or lr_diag_win or rl_diag_win:
+        is_winning_state = column_win or row_win or lr_diag_win or rl_diag_win
+        if is_winning_state:
             self.winner = player
-            return True
-        return False
+        return is_winning_state
 
     def make_move(self, move, player):
         if move[0] >= self.board_size or move[0] < 0:
