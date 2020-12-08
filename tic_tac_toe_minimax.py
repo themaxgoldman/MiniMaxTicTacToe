@@ -1,27 +1,28 @@
-from tic_tac_toe_model import TicTacToeModel as model
+from tic_tac_toe_model import TicTacToeModel
 import random
 
 moves_cache = dict()
 
 
 def get_next_move(player, model):
-    if model.board_size >= 5 and len(model) < model.board_size * 2 - 2:
+    if model.board_size >= 5 and len(model) < model.board_size * 2 - 3:
         return random.choice(list(model.remaining_moves))
-    best_score = -2
-    best_move = None
+    highest_score = -2
+    highest_move = None
     for move_option in model.remaining_moves:
         model.make_move(move_option, player)
-        option_score = minimax(model, player, False, -2, 2)
+        option_score = minimax(model, player, False, alpha=-2, beta=2)
         model.undo_move()
-        if option_score > best_score:
-            best_score = option_score
-            best_move = move_option
-    return best_move
+        if option_score > highest_score:
+            highest_score = option_score
+            highest_move = move_option
+    return highest_move
 
 
 # TODO: Maybe take depth into account for (impossible) imperfect games
 def minimax(model, our_player, maximizing, alpha, beta):
-    situation_str = str(model.board) + str(our_player) + str(maximizing)
+    situation_str = str(model.board) + str(our_player) + \
+        str(maximizing) + str(alpha) + str(beta)
     if situation_str in moves_cache:
         return moves_cache[situation_str]
 
@@ -45,16 +46,24 @@ def minimax(model, our_player, maximizing, alpha, beta):
             lowest_score = option_score
             lowest_move = move_option
         model.undo_move()
+
+        # if move_option == (1, 1):
+        #     print("move: {move} score: {score}".format(
+        #         move=move_option, score=option_score))
+        #     print("high_score: {high_score} low_score: {low_score} alpha:\
+        #          {alpha} beta: {beta}".format(high_score=highest_score,
+        #                                       low_score=lowest_score,
+        #                                       alpha=alpha, beta=beta))
         if maximizing:
-            alpha = max(alpha, highest_score)
-            if alpha >= beta:
+            alpha = max(highest_score, alpha)
+            if beta <= alpha:
                 break
         else:
-            beta = min(beta, lowest_score)
-            if beta <= alpha:
+            beta = min(lowest_score, beta)
+            if(beta <= alpha):
                 break
 
     result = highest_score if maximizing else lowest_score
     moves_cache[situation_str] = result
 
-    return highest_score if maximizing else lowest_score
+    return result
