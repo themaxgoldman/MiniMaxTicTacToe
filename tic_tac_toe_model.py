@@ -47,6 +47,9 @@ class TicTacToeModel:
         final_str = final_str + divider + '\n'
         return final_str
 
+    def __len__(self):
+        return self.num_moves
+
     def copy(self):
         copied = TicTacToeModel(board_size=self.board_size)
         copied.num_moves = self.num_moves
@@ -54,7 +57,7 @@ class TicTacToeModel:
         copied.board = self.board.copy()
         copied.remaining_moves = self.remaining_moves.copy()
         copied.winner = self.winner
-        coped.moves = self.moves.copy()
+        copied.moves = self.moves.copy()
         return copied
 
     def check_winner(self, spot):

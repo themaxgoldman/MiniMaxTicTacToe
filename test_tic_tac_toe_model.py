@@ -18,7 +18,7 @@ class TicTacToeModelTestCases(unittest.TestCase):
         self.assertEqual(self.empty_board.board_size, 3)
 
     def test_empty_board(self):
-        self.assertEqual(self.empty_board.num_moves, 0)
+        self.assertEqual(len(self.empty_board), 0)
         self.assertEqual(self.empty_board.board,
                          [[None, None, None],
                           [None, None, None],
@@ -71,7 +71,7 @@ class TicTacToeModelTestCases(unittest.TestCase):
 
     def test_make_move_empty_board(self):
         self.empty_board.make_move((1, 1), 0)
-        self.assertEqual(self.empty_board.num_moves, 1)
+        self.assertEqual(len(self.empty_board), 1)
         self.assertEqual(self.empty_board.board,
                          [[None, None, None],
                           [None, 0,    None],
@@ -87,7 +87,7 @@ class TicTacToeModelTestCases(unittest.TestCase):
              (2, 1),
              (2, 2)})
         self.empty_board.make_move((0, 0), 1)
-        self.assertEqual(self.empty_board.num_moves, 2)
+        self.assertEqual(len(self.empty_board), 2)
         self.assertEqual(self.empty_board.board,
                          [[1,    None, None],
                           [None, 0,    None],
@@ -104,7 +104,7 @@ class TicTacToeModelTestCases(unittest.TestCase):
 
     def test_make_move_mid_game_board(self):
         self.mid_game_board.make_move((2, 2), 1)
-        self.assertEqual(self.mid_game_board.num_moves, 6)
+        self.assertEqual(len(self.mid_game_board), 6)
         self.assertEqual(self.mid_game_board.board,
                          [[0,    1, 0],
                           [None, 0, None],
@@ -115,7 +115,7 @@ class TicTacToeModelTestCases(unittest.TestCase):
              (1, 2),
              (2, 0)})
         self.mid_game_board.make_move((2, 0), 0)
-        self.assertEqual(self.mid_game_board.num_moves, 7)
+        self.assertEqual(len(self.mid_game_board), 7)
         self.assertEqual(self.mid_game_board.board,
                          [[0,    1, 0],
                           [None, 0, None],
@@ -463,7 +463,7 @@ class TicTacToeModelTestCases(unittest.TestCase):
 
     def test_copy(self):
         copy = self.mid_game_board.copy()
-        self.assertEqual(copy.num_moves, 5)
+        self.assertEqual(len(copy), 5)
         self.assertEqual(copy.current_player, 1)
         self.assertEqual(copy.board, self.mid_game_board.board)
         self.assertEqual(copy.remaining_moves, {
@@ -472,26 +472,24 @@ class TicTacToeModelTestCases(unittest.TestCase):
         copy_board_before = copy.board.copy()
         self.mid_game_board.make_move((1, 0), 1)
 
-        self.assertEqual(copy.num_moves, 5)
+        self.assertEqual(len(copy), 5)
         self.assertEqual(copy.current_player, 1)
         self.assertEqual(copy.board, copy_board_before)
         self.assertEqual(copy.remaining_moves, {
                          (1, 0), (1, 2), (2, 0), (2, 2)})
 
-    def test_undo_last_move_no_move(self):
+    def test_undo_move_no_move(self):
         with self.assertRaises(ValueError):
-            self.empty_board.undo_last_move()
-        self.mid_game_board.undo_last_move()
-        with self.assertRaises(ValueError):
-            self.mid_game_board.undo_last_move()
+            self.empty_board.undo_move()
 
-    def test_undo_last_move_mid_game(self):
-        self.assertEqual(self.mid_game_board.last_move, (1, 1))
-        self.assertEqual(self.mid_game_board.num_moves, 4)
+    def test_undo_move_mid_game(self):
+        self.assertEqual(self.mid_game_board.moves[4], (1, 1))
+        self.mid_game_board.undo_move()
+        self.assertEqual(self.mid_game_board.moves[3], (2, 1))
+        self.assertEqual(len(self.mid_game_board), 4)
         self.assertEqual(self.mid_game_board.remaining_moves,
                          {(1, 0), (1, 2), (2, 0), (2, 2), (1, 1)})
         self.assertEqual(self.mid_game_board.current_player, 0)
-        self.assertIsNone(self.mid_game_board.last_move)
 
 
 if __name__ == "__main__":

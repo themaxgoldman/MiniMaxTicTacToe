@@ -5,7 +5,7 @@ moves_cache = dict()
 
 
 def get_next_move(player, model):
-    if model.board_size >= 5 and model.num_moves < model.board_size * 2 - 2:
+    if model.board_size >= 5 and len(model) < model.board_size * 2 - 2:
         return random.choice(list(model.remaining_moves))
     best_score = -2
     best_move = None
