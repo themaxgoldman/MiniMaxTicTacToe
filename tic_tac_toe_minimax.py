@@ -11,8 +11,10 @@ def get_next_move(player, model):
     highest_move = None
     for move_option in model.remaining_moves:
         model.make_move(move_option, player)
+        model.check_winner(move_option)
         option_score = minimax(model, player, False, alpha=-2, beta=2)
         model.undo_move()
+        # print(str(move_option) + " " + str(option_score))
         if option_score > highest_score:
             highest_score = option_score
             highest_move = move_option
@@ -30,9 +32,9 @@ def minimax(model, our_player, maximizing, alpha, beta):
     elif model.filled():
         return 0
 
-    highest_score = -1
+    highest_score = -2
     highest_move = None
-    lowest_score = 1
+    lowest_score = 2
     lowest_move = None
     for move_option in model.remaining_moves:
         model.make_move(move_option, model.current_player)
