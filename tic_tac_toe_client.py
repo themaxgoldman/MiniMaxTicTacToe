@@ -2,11 +2,22 @@ from tic_tac_toe_model import TicTacToeModel
 import sys
 import requests
 import tic_tac_toe_minimax as minimax
+import argparse
 
 server_endpoint = 'http://127.0.0.1:5000/move'
 
 
 def get_next_move_from_server(player, model):
+    """ Retrieves the next move from the 
+        ai server
+
+    Args:
+        player (int): the current player
+        model (TicTacToeModel): the model to send and evaluate
+
+    Returns:
+        (int, int): the resultant move
+    """
     payload = dict()
     payload['board_size'] = model.board_size
     payload['player'] = player
@@ -25,8 +36,19 @@ def get_next_move_from_server(player, model):
     return (int(x), int(y))
 
 
-def get_next_move(player, model):
-    if player == 1:
+def get_next_move(player, model, ai):
+    """ Get the next move from either a
+        human player or the ai
+
+    Args:
+        player (int): the current player
+        model (TicTacToeModel): the model to get move for
+        ai (int): the player that is the ai
+
+    Returns:
+        (int,int): the next move to make
+    """
+    if player == ai:
         return get_next_move_from_server(player, model)
     raw_move = input(
         "Enter move (x,y) player {player}: ".format(player=player))
@@ -38,13 +60,23 @@ def get_next_move(player, model):
 
 def main():
     print("-- Tic Tac Toe --\n")
-    model = TicTacToeModel()
-    if len(sys.argv) > 1:
-        model = TicTacToeModel(int(sys.argv[1]))
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--size", help="size of the one side of the board", type=int)
+    parser.add_argument(
+        "--ai", help="which player for ai, -1 for no ai", type=int, default=1)
+    args = parser.parse_args()
+    ai = args.ai
+    size = args.size
+    model = None
+    if size:
+        model = TicTacToeModel(size)
+    else:
+        model = TicTacToeModel()
     while True:
         print(model)
         current_player = model.current_player
-        next_move = get_next_move(current_player, model)
+        next_move = get_next_move(current_player, model, ai)
         try:
             model.make_move(next_move, current_player)
         except ValueError as err:

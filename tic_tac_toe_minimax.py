@@ -5,6 +5,17 @@ moves_cache = dict()
 
 
 def get_next_move(player, model):
+    """ User facing function to get the next recommended
+        move by the minimax algorithm based on the given
+        model
+
+    Args:
+        player (int): the player whose moves are being evaluated
+        model (TicTacToeModel): the model to evaluate
+
+    Returns:
+        (int, int): the recommended move to make
+    """
     if model.board_size >= 5 and len(model) < model.board_size * 2 - 3:
         return random.choice(list(model.remaining_moves))
     highest_score = -2
@@ -14,7 +25,6 @@ def get_next_move(player, model):
         model.check_winner(move_option)
         option_score = minimax(model, player, False, alpha=-2, beta=2)
         model.undo_move()
-        # print(str(move_option) + " " + str(option_score))
         if option_score > highest_score:
             highest_score = option_score
             highest_move = move_option
@@ -22,6 +32,19 @@ def get_next_move(player, model):
 
 
 def minimax(model, our_player, maximizing, alpha, beta):
+    """ Minimax function to calculate the optimal
+        move to make
+
+    Args:
+        model (TicTacToeModel): the model to evaluate
+        our_player (int): the player whose role minimax is replacing
+        maximizing (bool): whether or not this is a mazimizing step
+        alpha (int): the current alpha
+        beta (beta): the current beta
+
+    Returns:
+        int: the best possible score for the given state of the model
+    """
     situation_str = str(model.board) + str(our_player) + \
         str(maximizing) + str(alpha) + str(beta)
     if situation_str in moves_cache:

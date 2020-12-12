@@ -7,6 +7,8 @@
 !.vscode/extensions.json
 *.code-workspace
 
+project_demo.mp4
+
 # Local History for Visual Studio Code
 .history/
 
