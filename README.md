@@ -7,7 +7,7 @@ Arbitrarily large tic tac toe against a minimax AI
 Minimax TicTacToe is a standard tic tac toe game that utilizes a inimax algorithm to power its AI. The AI will always choose the optimal move, leading to either a win (if the human player messes up) or a tie. It will never lose. The demo is located [here](https://minimaxgames.s3.amazonaws.com/project_demo.mp4).
 
 ### Server/AI
-* `tic_tac_toe_server.py
+* `tic_tac_toe_server.py`
 * `tic_tac_toe_minimax.py`
 
 The minimax AI is run on a `Flask` server that utilizes two main optimizations to significantly speed up its computations. 
