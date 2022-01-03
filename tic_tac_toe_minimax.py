@@ -20,7 +20,8 @@ def get_next_move(player, model):
         return random.choice(list(model.remaining_moves))
     highest_score = -2
     highest_move = None
-    for move_option in model.remaining_moves:
+    moves = model.remaining_moves.copy()
+    for move_option in moves:
         model.make_move(move_option, player)
         model.check_winner(move_option)
         option_score = minimax(model, player, False, alpha=-2, beta=2)
@@ -59,7 +60,8 @@ def minimax(model, our_player, maximizing, alpha, beta):
     highest_move = None
     lowest_score = 2
     lowest_move = None
-    for move_option in model.remaining_moves:
+    moves = model.remaining_moves.copy()
+    for move_option in moves:
         model.make_move(move_option, model.current_player)
         model.check_winner(move_option)
         option_score = minimax(model, our_player, not maximizing, alpha, beta)
